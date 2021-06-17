@@ -1,0 +1,3 @@
+[submodule "src/pyffb"]
+	path = src/pyffb
+	url = https://github.com/prothen/pyffb.git
