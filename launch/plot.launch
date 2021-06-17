@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <node name="joystick_plotjuggler" 
+          pkg="plotjuggler"
+          type="plotjuggler"
+          args="--layout $(find joystick)/resources/plotjuggler/control.xml"
+    />
+</launch>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <arg name="agent_name" default="default"/>
+    <arg name="config_name" default="default"/>
+    <arg name="debug" default="true"/>
+    <arg name="test" default="false"/>
+
+    <node name="joystick_$(arg agent_name)" pkg="joystick" type="interface.py" output="screen">
+         <param name="test" value="$(arg test)" />
+         <param name="config_name" value="$(arg config_name)" />
+         <param name="debug_is_enabled" value="$(arg debug)" />
+    </node>
+</launch>
