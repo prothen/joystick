@@ -3,6 +3,6 @@
     <node name="joystick_plotjuggler" 
           pkg="plotjuggler"
           type="plotjuggler"
-          args="--layout $(find joystick)/resources/plotjuggler/control.xml"
+          args="--layout $(find joystick)/resources/plotjuggler/default.xml"
     />
 </launch>
