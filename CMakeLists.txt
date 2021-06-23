@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(joystick)
 
 find_package(catkin REQUIRED COMPONENTS
+  joystick_msgs
   geometry_msgs
   rospy
   std_msgs

@@ -11,8 +11,10 @@
         <!-- Use alternative joystick to generate additional human input -->
         <node name="joystick_input_node"
                 pkg="joy" type="joy_node" output="screen">
+        <remap from="/simulator/joy" to="/simulator/joystick_input" />
 
-            <remap from="~joy" to="/simulator/joystick_input" />
+            <param name="autorepeat_rate" value="100" />
+
         </node>
 
         <!-- Use simulated control node to republish haptic feedback -->
@@ -20,8 +22,9 @@
                 pkg="joystick" type="simulate_control.py" output="screen">
 
             <remap from="~joystick_input" to="/simulator/joystick_input" />
+
             <!-- Remap autonomous control output to joystick -->
-            <remap from="~control" to="/$(arg agent_name)/joystick/haptic_feedback" />
+            <remap from="~haptic_feedback" to="/$(arg agent_name)/joystick/haptic_feedback" />
         </node>
     </group>
 
