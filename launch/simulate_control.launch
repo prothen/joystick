@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <arg name="agent_name" default="agent"/>
+
+    <!-- Execute interface to force feedback joystick. -->
+    <include file="$(find joystick)/launch/interface.launch">
+        <arg name="agent_name" value="$(arg agent_name)"/>
+    </include>
+
+    <group ns="/simulator">
+        <!-- Use alternative joystick to generate additional human input -->
+        <node name="joystick_input_node"
+                pkg="joy" type="joy_node" output="screen">
+
+            <remap from="~joy" to="/simulator/joystick_input" />
+        </node>
+
+        <!-- Use simulated control node to republish haptic feedback -->
+        <node name="control_simulator_node"
+                pkg="joystick" type="simulate_control.py" output="screen">
+
+            <remap from="~joystick_input" to="/simulator/joystick_input" />
+            <!-- Remap autonomous control output to joystick -->
+            <remap from="~control" to="/$(arg agent_name)/joystick/haptic_feedback" />
+        </node>
+    </group>
+
+</launch>

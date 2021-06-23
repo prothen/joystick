@@ -6,8 +6,12 @@
     <arg name="test" default="false"/>
 
     <node name="joystick_$(arg agent_name)" pkg="joystick" type="interface.py" output="screen">
-         <param name="test" value="$(arg test)" />
-         <param name="config_name" value="$(arg config_name)" />
-         <param name="debug_is_enabled" value="$(arg debug)" />
+        <param name="test" value="$(arg test)" />
+        <param name="config_name" value="$(arg config_name)" />
+        <param name="debug_is_enabled" value="$(arg debug)" />
+        <!-- For launch file define static behaviour to remap into global namespace -->
+        <remap from="~status" to="/$(arg agent_name)/joystick/status" />
+        <remap from="~control" to="/$(arg agent_name)/joystick/control" />
+        <remap from="~haptic_feedback" to="/$(arg agent_name)/joystick/haptic_feedback" />
     </node>
 </launch>
