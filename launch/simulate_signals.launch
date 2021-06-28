@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <arg name="agent_name" default="agent"/>
+
+    <!-- Configure simulation interface. -->
+    <arg name="simulate_control" default="false"/>
+    <arg name="simulate_haptic" default="false"/>
+
+    <group ns="/simulator">
+        <!-- Use alternative joystick to generate additional human input. -->
+        <node name="joy_input_$(arg agent_name)"
+                pkg="joy" type="joy_node" output="screen">
+
+            <!-- Joystick input by default global but forced by using group namespace. -->
+            <remap from="/simulator/joy" to="/simulator/joystick_input" />
+
+            <param name="autorepeat_rate" value="100" />
+        </node>
+
+        <!-- Use simulated control node to republish haptic feedback. -->
+        <node name="joystick_simulator_$(arg agent_name)"
+                pkg="joystick" type="simulate_control.py" output="screen">
+
+            <!-- Link simulation input to joy output topic. -->
+            <remap from="~joystick_input" to="/simulator/joystick_input" />
+
+            <!-- Remap generated signal to haptic feedback of joystick. -->
+            <remap unless="$(arg simulate_haptic)"
+                from="~haptic_feedback"
+                to="/simulator/haptic_feedback" />
+            <remap if="$(arg simulate_haptic)"
+                from="~haptic_feedback"
+                to="/agents/$(arg agent_name)/joystick/haptic_feedback" />
+
+            <!-- Remap generated signal as output of joystick. Act like
+                    joy is control output of joystick. -->
+            <remap unless="$(arg simulate_control)"
+                from="~control"
+                to="/simulator/control" />
+            <remap if="$(arg simulate_control)"
+                from="~control"
+                to="/agents/$(arg agent_name)/joystick/control" />
+        </node>
+    </group>
+
+</launch>

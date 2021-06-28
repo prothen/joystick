@@ -2,16 +2,33 @@
 <launch>
     <arg name="agent_name" default="default"/>
     <arg name="config_name" default="default"/>
-    <arg name="debug" default="true"/>
+
+    <!-- Execute joy node and generate simulated control or haptic feedback signals. -->
+    <arg name="simulate_control" default="False"/>
+    <arg name="simulate_haptic" default="False"/>
+
+    <!-- Execute a testing sequence using external force commands. -->
     <arg name="test" default="false"/>
+    <arg name="debug" default="true"/>
 
     <node name="joystick_$(arg agent_name)" pkg="joystick" type="interface.py" output="screen">
         <param name="test" value="$(arg test)" />
+
+        <param name="agent_name" value="$(arg agent_name)" />
         <param name="config_name" value="$(arg config_name)" />
         <param name="debug_is_enabled" value="$(arg debug)" />
+
         <!-- For launch file define static behaviour to remap into global namespace -->
-        <remap from="~status" to="/$(arg agent_name)/joystick/status" />
-        <remap from="~control" to="/$(arg agent_name)/joystick/control" />
-        <remap from="~haptic_feedback" to="/$(arg agent_name)/joystick/haptic_feedback" />
+        <remap from="~status" to="/agents/$(arg agent_name)/joystick/status" />
+        <remap from="~control" to="/agents/$(arg agent_name)/joystick/control" />
+        <remap from="~haptic_feedback" to="/agents/$(arg agent_name)/joystick/haptic_feedback" />
     </node>
+
+    <include if="$(arg simulate_control)" file="$(find joystick)/launch/simulate_signals.launch">
+        <arg name="agent_name" value="$(arg agent_name)" />
+        <arg name="simulate_control" value="$(arg simulate_control)" />
+        <arg name="simulate_haptic" value="$(arg simulate_haptic)" />
+
+    </include>
+
 </launch>

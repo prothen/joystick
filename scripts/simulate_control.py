@@ -1,5 +1,18 @@
 #!/usr/bin/env python
-""" Simple test node to forward joystick to control topic. """
+""" Simple test node to forward joystick to control topic.
+
+    Note:
+        The control topic corresponds to the joystick position as
+
+            - /joystick/control
+            - geometry_msgs.msg.Vector3Stamped
+
+        while the haptic feedback signal is under
+
+            - /joystick/haptic_feedback
+            - joystick_msgs.msg.HapticControlStamped
+
+"""
 
 
 __author__ = "Philipp Rothenhäusler"
@@ -49,6 +62,7 @@ class ControlSimulator:
     _rate = attr.ib(default=None, type=typing.Optional[rospy.Rate])
 
     # Deadzone to consider zero input _d : [-th, th] -> 0
+    # TODO: Rescale output
     _deadzone_threshold = attr.ib(default=.2, type=float)
 
     def __attrs_post_init__(self):
