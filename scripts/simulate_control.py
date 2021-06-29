@@ -60,6 +60,7 @@ class ControlSimulator:
     # Upper bound for republishing frequency
     _frequency = attr.ib(default=100, type=float)
     _rate = attr.ib(default=None, type=typing.Optional[rospy.Rate])
+    _new_input_available = attr.ib(default=False, type=bool)
 
     # Deadzone to consider zero input _d : [-th, th] -> 0
     # TODO: Rescale output
@@ -106,6 +107,8 @@ class ControlSimulator:
         self._msg_haptic_feedback.stamp = msg.header.stamp
         self._msg_haptic_feedback.control = self._msg_control.vector
 
+        self._new_input_available = True
+
     def _publish_control(self):
         """ Publish parsed control message. """
         self._publisher_control.publish(self._msg_control)
@@ -126,9 +129,18 @@ class ControlSimulator:
         rospy.loginfo("Commence forwarding...")
 
         while not rospy.is_shutdown():
-            self._publish_control()
-            self._publish_haptic_feedback()
+            if self.new_input_available:
+                self._publish_control()
+                self._publish_haptic_feedback()
             self._rate.sleep()
+
+    @property
+    def new_input_available(self):
+        if self._new_input_available:
+            self._new_input_available = False
+            return True
+        return False
+
 
 
 if __name__ == "__main__":

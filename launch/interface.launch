@@ -28,7 +28,6 @@
         <arg name="agent_name" value="$(arg agent_name)" />
         <arg name="simulate_control" value="$(arg simulate_control)" />
         <arg name="simulate_haptic" value="$(arg simulate_haptic)" />
-
     </include>
 
 </launch>
